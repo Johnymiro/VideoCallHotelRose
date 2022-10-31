@@ -62,7 +62,6 @@ const styles = {
     marginRight: 10,
     marginLeft: 10,
     marginTop: 30,
-    borderRadius: 2,
   },
 };
 
@@ -70,7 +69,7 @@ const onPress = name => {
   console.log(name);
 };
 
-export default function ContactCard({name, category}) {
+export default function ContactCard({name, category, onCall}) {
   return (
     <View style={styles.cardContainer}>
       <ImageBackground
@@ -84,7 +83,7 @@ export default function ContactCard({name, category}) {
         <Text>{category}</Text>
       </ImageBackground>
 
-      <TouchableOpacity style={styles.button} onPress={() => onPress(name)}>
+      <TouchableOpacity style={styles.button} onPress={() => onCall()}>
         <Text style={styles.btnText}>Call Now</Text>
       </TouchableOpacity>
     </View>

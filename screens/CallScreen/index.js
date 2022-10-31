@@ -1,19 +1,18 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import AgoraUIKit from 'agora-rn-uikit';
+import {Button} from 'react-native';
 
-
-export default function CallScreen({handleEndCall}) {
-  const connectionData = {
-    appId: 'c902d8178a0f4bb98f9ec284eb4a1713',
-    channel: 'test',
-    token:
-      '007eJxTYNj2j2kj38Jfnv+O79Dh43ffZjLT1Yu3e/JKn8cn/vIW71RVYEi2NDBKsTA0t0g0SDNJSrK0SLNMTTayMElNMkk0NDc0TnoelNwQyMhwdMtkVkYGCATxWRhKUotLGBgAZJMgIQ==',
-  };
+export default function CallScreen({handleEndCall, connection}) {
   const rtcCallbacks = {
     EndCall: handleEndCall,
   };
 
+  useEffect(() => {
+    console.log('CONNNEction Screeen', connection.data);
+  }, []);
+
   return (
-    <AgoraUIKit connectionData={connectionData} rtcCallbacks={rtcCallbacks} />
+    <AgoraUIKit connectionData={connection.data} rtcCallbacks={rtcCallbacks} />
   );
 }
+

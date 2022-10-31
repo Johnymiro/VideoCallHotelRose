@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {View, Text, Button, Dimensions, Image} from 'react-native';
 import ContactCard from '../../components/ContactCard';
 
@@ -21,8 +21,8 @@ const styles = {
     height: '100%',
     backgroundColor: '#fff',
     padding: 20,
-    paddingRight:0,
-    paddingLeft: 0
+    paddingRight: 0,
+    paddingLeft: 0,
   },
   image: {
     width: window.width * 0.77,
@@ -34,10 +34,10 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    alignContent: "center",
-    flexDirection: "row",
-/*     borderWidth: 1, */
-    flexWrap: "wrap",
+    alignContent: 'center',
+    flexDirection: 'row',
+    /*     borderWidth: 1, */
+    flexWrap: 'wrap',
   },
 };
 
@@ -49,7 +49,7 @@ const contactsList = [
   {name: 'Kevin', category: 'Reception', avatar: ''},
 ];
 
-export default function ClientHomePage({onPress}) {
+export default function ClientHomePage({onCall}) {
   return (
     <View style={styles.container}>
       <View style={styles.content}>
@@ -64,6 +64,7 @@ export default function ClientHomePage({onPress}) {
                 key={contact.name}
                 name={contact.name}
                 category={contact.category}
+                onCall={() => onCall(contact.name)}
               />
             );
           })}
@@ -71,4 +72,13 @@ export default function ClientHomePage({onPress}) {
       </View>
     </View>
   );
+}
+
+{
+  /*         <Button
+          onPress={() => console.log({test: 'heyyyy'})}
+          title="Learn More"
+          color="#841584"
+          accessibilityLabel="Learn more about this purple button"
+        /> */
 }
