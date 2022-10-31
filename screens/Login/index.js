@@ -27,13 +27,14 @@ const styles = {
     marginRight: 'auto',
   },
   label: {
-      fontWeight: 'bold',
-      marginBottom: 5,
-      fontSize: 15
-  }
+    fontWeight: 'bold',
+    marginBottom: 5,
+    fontSize: 15,
+  },
 };
 const Login = ({handleLogin}) => {
   const [text, setText] = useState('');
+  const [password, setPassword] = useState('');
 
   return (
     <View style={styles.container}>
@@ -44,12 +45,20 @@ const Login = ({handleLogin}) => {
       <Text style={styles.label}>Username:</Text>
       <TextInput
         style={styles.textInput}
-        placeholder="Type here your username"
+        placeholder="Enter username.."
         onChangeText={newText => setText(newText)}
         defaultValue={text}
       />
+      <Text style={styles.label}>Password:</Text>
+      <TextInput
+        style={styles.textInput}
+        placeholder="Enter password.."
+        onChangeText={passwordInput => setPassword(passwordInput)}
+        defaultValue={password}
+        password
+      />
       <Button
-        onPress={() => handleLogin?.(text)}
+        onPress={() => handleLogin?.(text, password)}
         style={styles.button}
         title="Enter"
         color={colors.customPink}
