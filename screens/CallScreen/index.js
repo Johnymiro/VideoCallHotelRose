@@ -4,7 +4,7 @@ import {Button, View} from 'react-native';
 
 export default function CallScreen({handleEndCall, connection}) {
   const rtcCallbacks = {
-    EndCall: handleEndCall,
+    EndCall: () => handleEndCall(),
   };
 
   const rtmCallbacks = {

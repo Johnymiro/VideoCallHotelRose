@@ -5,11 +5,18 @@
  * @format
  * @flow strict-local
  */
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import ClientHomePage from './screens/ClientHomePage';
 import ManagersHomePage from './screens/ManagersHomePage';
 import CallScreen from './screens/CallScreen';
 import Login from './screens/Login';
+import RemotePushController from './components/RemotePushController';
+
+import {View, Text} from 'react-native';
+import {
+  requestUserPermission,
+  notificationListener,
+} from './src/utils/pushnotification_helper';
 
 const usersData = [
   {name: 'client', password: 'jhd0221', uid: 1, type: 'client'},
@@ -62,7 +69,7 @@ const App = () => {
     alert('Wrong username or password');
   };
 
-  return connection.isLogged ? (
+  /*   return connection.isLogged ? (
     connection.videoCall ? (
       <CallScreen connection={connection} handleEndCall={handleEndCall} />
     ) : connection.user.type === 'client' ? (
@@ -72,6 +79,18 @@ const App = () => {
     )
   ) : (
     <Login handleLogin={handleLogin} />
+  ); */
+
+  //
+  useEffect(() => {
+    requestUserPermission();
+    notificationListener();
+  }, []);
+
+  return (
+    <View>
+      <Text>Just testing2</Text>
+    </View>
   );
 };
 
