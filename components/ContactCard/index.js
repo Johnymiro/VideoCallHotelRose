@@ -41,7 +41,6 @@ const styles = {
   },
   button: {
     alignItems: 'center',
-    backgroundColor: colors.customPink,
     width: '100%',
     paddingBottom: 1,
   },
@@ -69,7 +68,13 @@ const onPress = name => {
   console.log(name);
 };
 
-export default function ContactCard({name, category, onCall}) {
+export default function ContactCard({
+  name,
+  category,
+  onCall,
+  hideOnCallBtn,
+  isAvailable,
+}) {
   return (
     <View style={styles.cardContainer}>
       <ImageBackground
@@ -83,9 +88,17 @@ export default function ContactCard({name, category, onCall}) {
         <Text>{category}</Text>
       </ImageBackground>
 
-      <TouchableOpacity style={styles.button} onPress={() => onCall()}>
-        <Text style={styles.btnText}>Call Now</Text>
-      </TouchableOpacity>
+      {!hideOnCallBtn && (
+        <TouchableOpacity
+          style={{
+            ...styles.button,
+            backgroundColor: isAvailable ? '#007E33' : 'lightgrey',
+          }}
+          disabled={!isAvailable}
+          onPress={() => console.log('hey')}>
+          <Text style={styles.btnText}>Call Now</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 }

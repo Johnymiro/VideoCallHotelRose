@@ -28,6 +28,7 @@ const usersData = [
 ];
 
 const App = () => {
+  const [notification, setNotification] = useState();
   const [connection, setConnection] = useState({
     data: {
       appId: 'c902d8178a0f4bb98f9ec284eb4a1713',
@@ -47,7 +48,7 @@ const App = () => {
   const handleEndCall = () =>
     setConnection(prev => ({...prev, videoCall: false}));
 
-  const handleLogin = (name, password) => {
+  const handleLogin = async (name, password) => {
     const user =
       typeof name === 'string'
         ? usersData.find(
@@ -73,23 +74,19 @@ const App = () => {
     connection.videoCall ? (
       <CallScreen connection={connection} handleEndCall={handleEndCall} />
     ) : connection.user.type === 'client' ? (
-      <ClientHomePage onCall={onCall} />
     ) : (
       <ManagersHomePage call={onCall} user={connection.user} />
     )
   ) : (
     <Login handleLogin={handleLogin} />
+      <ManagersHomePage call={onCall} user={usersData[1]} />
   ); */
 
   //
-  useEffect(() => {
-    requestUserPermission();
-    notificationListener();
-  }, []);
 
   return (
     <View>
-      <Text>Just testing2</Text>
+      <ClientHomePage onCall={onCall} />
     </View>
   );
 };

@@ -30,7 +30,7 @@ async function getFCMToken() {
   }
 }
 
-export const notificationListener = () => {
+export const notificationListener = ({setNotification}) => {
   // Assume a message-notification contains a "type" property in the data payload of the screen to open
 
   messaging().onNotificationOpenedApp(remoteMessage => {
@@ -55,5 +55,6 @@ export const notificationListener = () => {
 
   messaging().onMessage(async remoteMessage => {
     console.log('async remote message', remoteMessage);
+    setNotification(remoteMessage)
   });
 };

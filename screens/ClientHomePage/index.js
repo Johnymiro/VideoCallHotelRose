@@ -1,6 +1,7 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, Button, Dimensions, Image} from 'react-native';
 import ContactCard from '../../components/ContactCard';
+import firestore from '@react-native-firebase/firestore';
 
 const window = Dimensions.get('window');
 
@@ -50,6 +51,31 @@ const contactsList = [
 ];
 
 export default function ClientHomePage({onCall}) {
+  const [contactList, setContactList] = useState();
+
+  const getUsers = async () => {
+    const subscriber = await firestore()
+      .collection('Users')
+      .onSnapshot(
+        usersSnapshot => {
+          console.log('Users collection2:', usersData);
+          const usersData = usersSnapshot.docs.map(doc => doc.data());
+          setContactList(usersData);
+        },
+        er => console.log(er),
+      );
+    return subscriber;
+  };
+  useEffect(() => {
+    const subscriber = getUsers();
+
+    return () => subscriber();
+  }, []);
+
+  useEffect(() => {
+    console.log('contactList', contactList);
+  }, [contactList]);
+
   return (
     <View style={styles.container}>
       <View style={styles.content}>
@@ -58,12 +84,13 @@ export default function ClientHomePage({onCall}) {
           source={require('../../assets/HotelRoseTitle.jpeg')}
         />
         <View style={styles.contactsList}>
-          {contactsList.map(contact => {
+          {contactList?.map(contact => {
             return (
               <ContactCard
                 key={contact.name}
                 name={contact.name}
-                category={contact.category}
+                isAvailable={contact.isAvailable}
+                category={contact.type}
                 onCall={() => onCall(contact.name)}
               />
             );
