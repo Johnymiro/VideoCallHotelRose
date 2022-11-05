@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, Button, Switch} from 'react-native';
+import {View, Text, Button, Switch, TouchableOpacity} from 'react-native';
 import {colors} from '../../constants';
 import ContactCard from '../../components/ContactCard';
 import firestore from '@react-native-firebase/firestore';
@@ -36,9 +36,19 @@ const styles = {
   title: {
     fontSize: 29,
     fontWeight: 'bold',
+    /*     color: "#00695c" */
   },
+  buttonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 17,
+  },
+  touchBtn: {
+    backgroundColor: "lightblue",
+    padding: 20,
+  }
 };
-export default function ({user, call}) {
+export default function ({user, call, setUser}) {
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => {
     setIsEnabled(previousState => !previousState);
@@ -49,7 +59,7 @@ export default function ({user, call}) {
     const users = await firestore()
       .collection('Users')
       .onSnapshot(
-        (users) => {
+        users => {
           console.log(
             'Users collection:',
             users.docs.map(doc => doc.data()),
@@ -61,7 +71,7 @@ export default function ({user, call}) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Hello2: {user.name}</Text>
+      <Text style={styles.title}>Hi {user.name}</Text>
 
       <View style={styles.userStatus}>
         <Text style={styles.userStatusLabel}>
@@ -77,12 +87,32 @@ export default function ({user, call}) {
         />
       </View>
 
-      <View style={{width: 200}}>
-        <Button
+      <View
+        style={{
+          width: '100%',
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'center',
+        }}>
+{/*         <TouchableOpacity
           onPress={getUsers}
           title="Call Hotel"
-          color={colors.customPink}
-          accessibilityLabel="Learn more about this purple button"
+            style={styles.touchBtn}
+          accessibilityLabel="Call Button">
+          <Text style={styles.buttonText}>Call Now</Text>
+        </TouchableOpacity> */}
+        <View style={{marginRight: 20}}>
+          <Button
+            onPress={getUsers}
+            title="Call Hotel"
+            accessibilityLabel="Call Button"
+          />
+        </View>
+        <Button
+          onPress={() => setUser?.(undefined)}
+          title="Logout"
+          color="#CC0000"
+          accessibilityLabel="Logout Button"
         />
       </View>
     </View>

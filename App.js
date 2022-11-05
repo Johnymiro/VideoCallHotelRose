@@ -13,22 +13,9 @@ import Login from './screens/Login';
 import RemotePushController from './components/RemotePushController';
 
 import {View, Text} from 'react-native';
-import {
-  requestUserPermission,
-  notificationListener,
-} from './src/utils/pushnotification_helper';
-
-const usersData = [
-  {name: 'client', password: 'jhd0221', uid: 1, type: 'client'},
-  {name: 'Corinna', password: 'thk2310', uid: 2, type: 'reception'},
-  {name: 'Sole', password: 'cio3294', uid: 3, type: 'reception'},
-  {name: 'Nico', password: 'fji2938', uid: 5, type: 'reception'},
-  {name: 'Herbert', password: 'sde3214', uid: 5, type: 'reception'},
-  {name: 'Kevin', password: 'dfi4324', uid: 6, type: 'reception'},
-];
 
 const App = () => {
-  const [notification, setNotification] = useState();
+  const [user, setUser] = useState();
   const [connection, setConnection] = useState({
     data: {
       appId: 'c902d8178a0f4bb98f9ec284eb4a1713',
@@ -70,25 +57,37 @@ const App = () => {
     alert('Wrong username or password');
   };
 
-  /*   return connection.isLogged ? (
+  return user?.name ? (
     connection.videoCall ? (
       <CallScreen connection={connection} handleEndCall={handleEndCall} />
-    ) : connection.user.type === 'client' ? (
+    ) : user?.type === 'client' ? (
+      <ClientHomePage onCall={onCall} />
     ) : (
-      <ManagersHomePage call={onCall} user={connection.user} />
+      <ManagersHomePage call={onCall} user={user} setUser={setUser} />
     )
   ) : (
-    <Login handleLogin={handleLogin} />
-      <ManagersHomePage call={onCall} user={usersData[1]} />
-  ); */
+    <Login setUser={setUser} />
+  );
 
-  //
-
-  return (
+  /*   return (
     <View>
       <ClientHomePage onCall={onCall} />
     </View>
-  );
+  ); */
 };
 
 export default App;
+
+/* import {
+  requestUserPermission,
+  notificationListener,
+} from './src/utils/pushnotification_helper'; */
+
+/* const usersData = [
+  {name: 'client', password: 'jhd0221', uid: 1, type: 'client'},
+  {name: 'Corinna', password: 'thk2310', uid: 2, type: 'reception'},
+  {name: 'Sole', password: 'cio3294', uid: 3, type: 'reception'},
+  {name: 'Nico', password: 'fji2938', uid: 5, type: 'reception'},
+  {name: 'Herbert', password: 'sde3214', uid: 5, type: 'reception'},
+  {name: 'Kevin', password: 'dfi4324', uid: 6, type: 'reception'},
+]; */

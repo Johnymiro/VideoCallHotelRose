@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {Dimensions, Text, TextInput, View, Button, Image} from 'react-native';
 import {colors} from '../../constants';
+import firestore from '@react-native-firebase/firestore';
 
 const window = Dimensions.get('window');
 
@@ -32,9 +33,23 @@ const styles = {
     fontSize: 15,
   },
 };
-const Login = ({handleLogin}) => {
+const Login = ({setUser}) => {
   const [text, setText] = useState('');
   const [password, setPassword] = useState('');
+
+  const handleLogin = async () => {
+    if (text && password) {
+      const user = await firestore().collection('Users').doc(text).get();
+
+      console.log(user.data());
+      if (user.exists && user.data().password === password) {
+        console.log('Correct credentials');
+        setUser(user.data());
+        return;
+      }
+    }
+    alert('Wrong user credentials');
+  };
 
   return (
     <View style={styles.container}>
