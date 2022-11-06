@@ -42,15 +42,7 @@ const styles = {
   },
 };
 
-const contactsList = [
-  {name: 'Corinna', category: 'Reception', avatar: ''},
-  {name: 'Sole', category: 'Reception', avatar: ''},
-  {name: 'Nico', category: 'Reception', avatar: ''},
-  {name: 'Herbert', category: 'Reception', avatar: ''},
-  {name: 'Kevin', category: 'Reception', avatar: ''},
-];
-
-export default function ClientHomePage({onCall}) {
+export default function ClientHomePage({onCall, data, endCall}) {
   const [contactList, setContactList] = useState();
 
   const getUsers = async () => {
@@ -66,15 +58,35 @@ export default function ClientHomePage({onCall}) {
       );
     return subscriber;
   };
+
+  const handleManagerCalling = async () => {
+    const subscriber = await firestore()
+      .collection('Users')
+      .doc('client')
+      .onSnapshot(
+        client => {
+          if (client.data().isToOpenCallScreen) {
+            onCall();
+          }
+          if (!client.data().isToOpenCallScreen) {
+            endCall();
+          }
+        },
+        er => console.log(er),
+      );
+    return subscriber;
+  };
+
   useEffect(() => {
     const subscriber = getUsers();
-
-    return () => subscriber();
+    const subscriber2 = handleManagerCalling();
+    return () => {
+      subscriber();
+      subscriber2();
+    };
   }, []);
 
-  useEffect(() => {
-    console.log('contactList', contactList);
-  }, [contactList]);
+  useEffect(() => {}, []);
 
   return (
     <View style={styles.container}>
@@ -91,7 +103,7 @@ export default function ClientHomePage({onCall}) {
                 name={contact.name}
                 isAvailable={contact.isAvailable}
                 category={contact.type}
-                onCall={() => onCall(contact.name)}
+                onCall={() => onCall(contact?.name?.toLowerCase())}
               />
             );
           })}
@@ -99,13 +111,4 @@ export default function ClientHomePage({onCall}) {
       </View>
     </View>
   );
-}
-
-{
-  /*         <Button
-          onPress={() => console.log({test: 'heyyyy'})}
-          title="Learn More"
-          color="#841584"
-          accessibilityLabel="Learn more about this purple button"
-        /> */
 }

@@ -27,10 +27,6 @@ export default function CallScreen({handleEndCall, connection}) {
   }, []);
 
   return (
-    <AgoraUIKit
-      rtmCallbacks={rtmCallbacks}
-      connectionData={connection.data}
-      rtcCallbacks={rtcCallbacks}
-    />
+    <AgoraUIKit connectionData={connection.data} rtcCallbacks={rtcCallbacks} />
   );
 }

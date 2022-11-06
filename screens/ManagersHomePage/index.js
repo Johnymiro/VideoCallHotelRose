@@ -1,10 +1,18 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, Button, Switch, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  Button,
+  Switch,
+  TouchableOpacity,
+  Image,
+  Dimensions
+} from 'react-native';
 import {colors} from '../../constants';
 import ContactCard from '../../components/ContactCard';
 import firestore from '@react-native-firebase/firestore';
 
-const usersCollection = firestore().collection('Users');
+const window = Dimensions.get('window');
 
 const styles = {
   container: {
@@ -44,33 +52,35 @@ const styles = {
     fontSize: 17,
   },
   touchBtn: {
-    backgroundColor: "lightblue",
+    backgroundColor: 'lightblue',
     padding: 20,
-  }
+  },
+  image: {
+    width: window.width * 0.77,
+    height: window.width * 0.15,
+  },
 };
 export default function ({user, call, setUser}) {
   const [isEnabled, setIsEnabled] = useState(false);
-  const toggleSwitch = () => {
-    setIsEnabled(previousState => !previousState);
-    console.log('hellooowow');
-  };
 
-  const getUsers = async () => {
-    const users = await firestore()
-      .collection('Users')
-      .onSnapshot(
-        users => {
-          console.log(
-            'Users collection:',
-            users.docs.map(doc => doc.data()),
-          );
-        },
-        er => console.log(er),
-      );
+  const toggleSwitch = async () => {
+    if (!user?.name) {
+      alert('Server maybe offline, no user found');
+      return;
+    }
+    await firestore().collection('Users').doc(user.name.toLowerCase()).update({
+      isAvailable: !isEnabled,
+    });
+
+    setIsEnabled(previousState => !previousState);
   };
 
   return (
     <View style={styles.container}>
+      <Image
+        style={styles.image}
+        source={require('../../assets/HotelRoseTitle.jpeg')}
+      />
       <Text style={styles.title}>Hi {user.name}</Text>
 
       <View style={styles.userStatus}>
@@ -94,16 +104,16 @@ export default function ({user, call, setUser}) {
           flexDirection: 'row',
           justifyContent: 'center',
         }}>
-{/*         <TouchableOpacity
+        {/*         <TouchableOpacity
           onPress={getUsers}
           title="Call Hotel"
             style={styles.touchBtn}
           accessibilityLabel="Call Button">
           <Text style={styles.buttonText}>Call Now</Text>
         </TouchableOpacity> */}
-        <View style={{marginRight: 20}}>
+        <View style={{marginRight: 28}}>
           <Button
-            onPress={getUsers}
+            onPress={call}
             title="Call Hotel"
             accessibilityLabel="Call Button"
           />
