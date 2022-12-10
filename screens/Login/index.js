@@ -39,7 +39,7 @@ const Login = ({setUser}) => {
 
   const handleLogin = async () => {
     if (text && password) {
-      const user = await firestore().collection('Users').doc(text).get();
+      const user = await firestore().collection('Users').doc(text.toLowerCase()).get();
 
       console.log(user.data());
       if (user.exists && user.data().password === password) {

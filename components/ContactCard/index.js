@@ -76,29 +76,38 @@ export default function ContactCard({
   isAvailable,
 }) {
   return (
-    <View style={styles.cardContainer}>
-      <ImageBackground
-        source={require('../../assets/bgHotelRose.jpeg')}
-        resizeMode="cover"
-        style={styles.image}>
-        <View style={styles.avatar}>
-          <View style={styles.piktoGram}></View>
-        </View>
-        <Text style={{fontWeight: 'bold', top: 3}}>{name}</Text>
-        <Text>{category}</Text>
-      </ImageBackground>
+    <TouchableOpacity
+      style={{
+        backgroundColor: 'transparent',
+      }}
+      disabled={!isAvailable}
+      onPress={() => {
+        onCall();
+      }}>
+      <View style={styles.cardContainer}>
+        <ImageBackground
+          source={require('../../assets/bgHotelRose.jpeg')}
+          resizeMode="cover"
+          style={styles.image}>
+          <View style={styles.avatar}>
+            <View style={styles.piktoGram}></View>
+          </View>
+          <Text style={{fontWeight: 'bold', top: 3}}>{name}</Text>
+          <Text>{category}</Text>
+        </ImageBackground>
 
-      {!hideOnCallBtn && (
-        <TouchableOpacity
-          style={{
-            ...styles.button,
-            backgroundColor: isAvailable ? '#007E33' : 'lightgrey',
-          }}
-          disabled={!isAvailable}
-          onPress={() => console.log('hey')}>
-          <Text style={styles.btnText}>Call Now</Text>
-        </TouchableOpacity>
-      )}
-    </View>
+        {!hideOnCallBtn && (
+          <TouchableOpacity
+            style={{
+              ...styles.button,
+              backgroundColor: isAvailable ? '#007E33' : 'lightgrey',
+            }}
+            disabled={!isAvailable}
+            onPress={() => onCall()}>
+            <Text style={styles.btnText}>Call Now</Text>
+          </TouchableOpacity>
+        )}
+      </View>
+    </TouchableOpacity>
   );
 }

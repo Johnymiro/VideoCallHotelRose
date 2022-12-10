@@ -10,10 +10,7 @@ import ClientHomePage from './screens/ClientHomePage';
 import ManagersHomePage from './screens/ManagersHomePage';
 import CallScreen from './screens/CallScreen';
 import Login from './screens/Login';
-import RemotePushController from './components/RemotePushController';
-import {View, Text, Button} from 'react-native';
 import firestore from '@react-native-firebase/firestore';
-import EndCall from 'agora-rn-uikit/src/Controls/Local/EndCall';
 
 const App = () => {
   const [user, setUser] = useState();
@@ -21,12 +18,19 @@ const App = () => {
     data: {
       appId: 'c902d8178a0f4bb98f9ec284eb4a1713',
       channel: 'HotelRose',
-      tokenUrl: 'http://10.0.2.2:8080',
+      //tokenUrl: 'https://video-call-hotel-rose.herokuapp.com',
+      tokenUrl: 'https://agora-token-server-6efj.onrender.com',
     },
     videoCall: false,
     isLogged: false,
     user: null,
   });
+
+  const setVideoCall = bool => {
+    setConnection(prev => {
+      return {...prev, videoCall: bool};
+    });
+  };
 
   const onClientCall = async id => {
     console.log('calling');
@@ -87,7 +91,7 @@ const App = () => {
         endCall={handleEndCall}
       />
     ) : (
-      <ManagersHomePage call={onManagerCall} user={user} setUser={setUser} />
+      <ManagersHomePage setVideoCall={setVideoCall} call={onManagerCall} user={user} setUser={setUser} />
     )
   ) : (
     <Login setUser={setUser} />
@@ -95,44 +99,3 @@ const App = () => {
 };
 
 export default App;
-
-/* import {
-  requestUserPermission,
-  notificationListener,
-} from './src/utils/pushnotification_helper'; */
-/*   return (
-    <View>
-      <ClientHomePage onCall={onCall} />
-    </View>
-  ); */
-
-/* const usersData = [
-  {name: 'client', password: 'jhd0221', uid: 1, type: 'client'},
-  {name: 'Corinna', password: 'thk2310', uid: 2, type: 'reception'},
-  {name: 'Sole', password: 'cio3294', uid: 3, type: 'reception'},
-  {name: 'Nico', password: 'fji2938', uid: 5, type: 'reception'},
-  {name: 'Herbert', password: 'sde3214', uid: 5, type: 'reception'},
-  {name: 'Kevin', password: 'dfi4324', uid: 6, type: 'reception'},
-
-  const handleLogin = async (name, password) => {
-    const user =
-      typeof name === 'string'
-        ? usersData.find(
-            e =>
-              e.name.toLowerCase() === name.toLowerCase() &&
-              e.password === password,
-          )
-        : undefined;
-
-    if (user) {
-      setConnection(prev => ({
-        ...prev,
-        isLogged: true,
-        user,
-        data: {...prev.data, uid: user.uid, username: user.name},
-      }));
-      return;
-    }
-    alert('Wrong username or password');
-  };
-]; */

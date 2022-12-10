@@ -6,11 +6,14 @@ import {
   Switch,
   TouchableOpacity,
   Image,
-  Dimensions
+  Dimensions,
+  Alert,
 } from 'react-native';
 import {colors} from '../../constants';
 import ContactCard from '../../components/ContactCard';
 import firestore from '@react-native-firebase/firestore';
+import Popup from './Popup';
+import {is} from '@babel/types';
 
 const window = Dimensions.get('window');
 
@@ -60,23 +63,92 @@ const styles = {
     height: window.width * 0.15,
   },
 };
-export default function ({user, call, setUser}) {
+export default function ({user, call, setUser, setVideoCall}) {
   const [isEnabled, setIsEnabled] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const setClientCalling = bool => {
+    return firestore()
+      .collection('Users')
+      .doc(user.name.toLowerCase())
+      .update({isClientCalling: bool});
+  };
 
   const toggleSwitch = async () => {
     if (!user?.name) {
       alert('Server maybe offline, no user found');
       return;
     }
+
     await firestore().collection('Users').doc(user.name.toLowerCase()).update({
       isAvailable: !isEnabled,
     });
 
     setIsEnabled(previousState => !previousState);
   };
+  const acceptCall = async () => {
+    console.log('Accepting');
+    await firestore().collection('Users').doc('client').update({
+      'connection.isCallAccepted': true,
+      'connection.isCallDeclined': false,
+    });
+    setClientCalling(false);
+    setVideoCall(true);
+    setModalVisible(false);
+  };
+
+  const declineCall = async () => {
+    console.log('Declining');
+    await firestore().collection('Users').doc('client').update({
+      'connection.isCallDeclined': true,
+      'connection.isCallAccepted': false,
+    });
+
+    setClientCalling(false);
+    setVideoCall(false);
+    setModalVisible(false);
+  };
+
+  const managerSnapshot = async () => {
+    const subscriber = await firestore()
+      .collection('Users')
+      .doc(user.name.toLowerCase())
+      .onSnapshot(
+        client => {
+          if(!client.exists) return;
+          const isClientCalling = client.data()?.isClientCalling;
+          setUser(client.data());
+          if (isClientCalling) {
+            setModalVisible(true);
+          }
+          if (!isClientCalling) {
+            setModalVisible(false);
+          }
+        },
+        er => console.log(er),
+      );
+    return subscriber;
+  };
+
+  useEffect(() => {
+    const subs = managerSnapshot();
+    return () => {
+      firestore()
+        .collection('Users')
+        .doc(user.name.toLowerCase())
+        .update({isAvailable: false});
+      subs && subs();
+    };
+  }, []);
 
   return (
     <View style={styles.container}>
+      <Popup
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        accept={acceptCall}
+        decline={declineCall}
+      />
       <Image
         style={styles.image}
         source={require('../../assets/HotelRoseTitle.jpeg')}
@@ -119,7 +191,9 @@ export default function ({user, call, setUser}) {
           />
         </View>
         <Button
-          onPress={() => setUser?.(undefined)}
+          onPress={() => {
+            setUser?.(undefined);
+          }}
           title="Logout"
           color="#CC0000"
           accessibilityLabel="Logout Button"

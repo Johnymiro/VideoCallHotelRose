@@ -7,25 +7,6 @@ export default function CallScreen({handleEndCall, connection}) {
     EndCall: () => handleEndCall(),
   };
 
-  const rtmCallbacks = {
-    ConnectionStateChanged: () => {},
-    ChannelMemberJoined: member => {
-      console.log('ChannelMemme join: ', member);
-    },
-    LocalInvitationReceivedByPeer: () => {},
-    MemberCountUpdated: count => {
-      console.log('COUNTT: ', count);
-    },
-    ConnectionStateChanged: state => {
-      console.log('STATEee', state);
-    },
-    uidMap: () => {},
-  };
-
-  useEffect(() => {
-    console.log('CONNNEction Screeen', connection.data);
-  }, []);
-
   return (
     <AgoraUIKit connectionData={connection.data} rtcCallbacks={rtcCallbacks} />
   );

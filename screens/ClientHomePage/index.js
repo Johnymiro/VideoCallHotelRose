@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {View, Text, Button, Dimensions, Image} from 'react-native';
 import ContactCard from '../../components/ContactCard';
 import firestore from '@react-native-firebase/firestore';
+import {useClientPage} from './useClientPage';
 
 const window = Dimensions.get('window');
 
@@ -44,8 +45,9 @@ const styles = {
 
 export default function ClientHomePage({onCall, data, endCall}) {
   const [contactList, setContactList] = useState();
+  //const {client, contactList} = useClientPage();
 
-  const getUsers = async () => {
+   const getUsers = async () => {
     const subscriber = await firestore()
       .collection('Users')
       .onSnapshot(
@@ -81,12 +83,11 @@ export default function ClientHomePage({onCall, data, endCall}) {
     const subscriber = getUsers();
     const subscriber2 = handleManagerCalling();
     return () => {
-      subscriber();
-      subscriber2();
+      subscriber && subscriber();
+      subscriber2 && subscriber2();
     };
-  }, []);
+  }, []); 
 
-  useEffect(() => {}, []);
 
   return (
     <View style={styles.container}>
@@ -96,17 +97,19 @@ export default function ClientHomePage({onCall, data, endCall}) {
           source={require('../../assets/HotelRoseTitle.jpeg')}
         />
         <View style={styles.contactsList}>
-          {contactList?.map(contact => {
-            return (
-              <ContactCard
-                key={contact.name}
-                name={contact.name}
-                isAvailable={contact.isAvailable}
-                category={contact.type}
-                onCall={() => onCall(contact?.name?.toLowerCase())}
-              />
-            );
-          })}
+          {contactList
+            ?.filter(el => el.type != 'client')
+            .map(contact => {
+              return (
+                <ContactCard
+                  key={contact.name}
+                  name={contact.name}
+                  isAvailable={contact.isAvailable}
+                  category={contact.type}
+                  onCall={() => onCall(contact?.name?.toLowerCase())}
+                />
+              );
+            })}
         </View>
       </View>
     </View>
