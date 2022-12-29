@@ -1,5 +1,13 @@
 import React, {useState} from 'react';
-import {Dimensions, Text, TextInput, View, Button, Image} from 'react-native';
+import {
+  Dimensions,
+  Text,
+  TextInput,
+  View,
+  Button,
+  Image,
+  ActivityIndicator,
+} from 'react-native';
 import {colors} from '../../constants';
 import firestore from '@react-native-firebase/firestore';
 
@@ -18,7 +26,7 @@ const styles = {
     height: '100%',
   },
   button: {
-    height: 55,
+    height: 65,
   },
   image: {
     width: window.width * 0.77,
@@ -35,6 +43,7 @@ const styles = {
 const Login = ({setUser}) => {
   const [text, setText] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
     if (text && password) {
@@ -84,13 +93,17 @@ const Login = ({setUser}) => {
         defaultValue={password}
         password
       />
-      <Button
-        onPress={() => handleLogin?.(text, password)}
-        style={styles.button}
-        title="Enter"
-        color={colors.customPink}
-        accessibilityLabel="Learn more about this purple button"
-      />
+      {!loading ? (
+        <Button
+          onPress={() => handleLogin?.(text, password)}
+          style={styles.button}
+          title="Log in"
+          color={colors.customPink}
+          accessibilityLabel="Learn more about this purple button"
+        />
+      ) : (
+        <ActivityIndicator size="large" color={colors.customPink} />
+      )}
     </View>
   );
 };

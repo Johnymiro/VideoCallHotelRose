@@ -7,6 +7,8 @@ import {
   ImageBackground,
 } from 'react-native';
 
+const baseSize = 1.4;
+
 const colors = {
   customBlue: '#CBDEEC',
   customGrey: '#E7E7E9',
@@ -16,8 +18,8 @@ const colors = {
 
 const styles = {
   cardBackgroundCircle: {
-    width: 150,
-    height: 150,
+    width: 150 * baseSize,
+    height: 150 * baseSize,
     shapeOutside: 'ellipse(20% 50%)',
     clipPath: 'ellipse(20% 50%)',
     backgroundColor: colors.customBlue,
@@ -26,23 +28,25 @@ const styles = {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    width: 78,
-    height: 78,
-    borderRadius: 50,
+    width: 78 * baseSize,
+    height: 78 * baseSize,
+    borderRadius: 60,
     borderWidth: 5,
     borderColor: colors.customPink,
     backgroundColor: 'transparent',
   },
   piktoGram: {
-    width: 56,
-    height: 56,
-    borderRadius: 50,
+    width: 56 * baseSize,
+    height: 56 * baseSize,
+    borderRadius: 60,
     backgroundColor: colors.customGrey,
   },
   button: {
+    justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
     paddingBottom: 1,
+    height: 26
   },
   btnText: {
     color: '#fff',
@@ -53,8 +57,8 @@ const styles = {
     alignItems: 'center',
   },
   cardContainer: {
-    height: 170,
-    width: 135,
+    height: 170 * baseSize,
+    width: 135 * baseSize,
     backgroundColor: 'orange',
     display: 'flex',
     /*     borderWidth: 1, */
@@ -62,10 +66,6 @@ const styles = {
     marginLeft: 10,
     marginTop: 30,
   },
-};
-
-const onPress = name => {
-  console.log(name);
 };
 
 export default function ContactCard({

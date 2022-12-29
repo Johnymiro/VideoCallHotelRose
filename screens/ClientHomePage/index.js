@@ -1,9 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, Button, Dimensions, Image, Vibration} from 'react-native';
+import {View, Text, Button, Dimensions, Image, ScrollView} from 'react-native';
 import ContactCard from '../../components/ContactCard';
 import firestore from '@react-native-firebase/firestore';
 
 const window = Dimensions.get('window');
+let ScreenHeight = window.height;
+
 
 const styles = {
   container: {
@@ -19,7 +21,7 @@ const styles = {
     justifyContent: 'flex-start',
     alignItems: 'center',
     width: '100%',
-    height: '100%',
+    minHeight: ScreenHeight,
     backgroundColor: '#fff',
     padding: 20,
     paddingRight: 0,
@@ -88,28 +90,30 @@ export default function ClientHomePage({onCall, data, endCall}) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.content}>
-        <Image
-          style={styles.image}
-          source={require('../../assets/HotelRoseTitle.jpeg')}
-        />
-        <View style={styles.contactsList}>
-          {contactList
-            ?.filter(el => el.type != 'client')
-            .map(contact => {
-              return (
-                <ContactCard
-                  key={contact.name}
-                  name={contact.name}
-                  isAvailable={contact.isAvailable}
-                  category={contact.type}
-                  onCall={() => onCall(contact?.name?.toLowerCase())}
-                />
-              );
-            })}
+      <ScrollView>
+        <View style={styles.content}>
+          <Image
+            style={styles.image}
+            source={require('../../assets/HotelRoseTitle.jpeg')}
+          />
+          <View style={styles.contactsList}>
+            {contactList
+              ?.filter(el => el.type != 'client')
+              .map(contact => {
+                return (
+                  <ContactCard
+                    key={contact.name}
+                    name={contact.name}
+                    isAvailable={contact.isAvailable}
+                    category={contact.type}
+                    onCall={() => onCall(contact?.name?.toLowerCase())}
+                  />
+                );
+              })}
+          </View>
         </View>
-      </View>
+      </ScrollView>
     </View>
   );
 }
-// Vibration.cancel()  
+// Vibration.cancel()

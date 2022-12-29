@@ -153,26 +153,28 @@ export default function ({user, call, setUser, setVideoCall}) {
 
   return (
     <View style={styles.container}>
-      <Popup
-        modalVisible={modalVisible}
-        setModalVisible={setModalVisible}
-        accept={acceptCall}
-        decline={declineCall}
-      />
+      {modalVisible && (
+        <Popup
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+          accept={acceptCall}
+          decline={declineCall}
+        />
+      )}
       <View
         style={{
           width: '100%',
           padding: 30,
           borderRadius: 3,
-          backgroundColor: "white",
-          alignItems: 'center'
+          backgroundColor: 'white',
+          alignItems: 'center',
         }}>
         <Image
           style={styles.image}
           source={require('../../assets/HotelRoseTitle.jpeg')}
         />
       </View>
-      <Text style={styles.title}>Hi {user.name}</Text>
+      {/*       <Text style={styles.title}>Hi {user.name}</Text> */}
 
       <View>
         <Text style={{fontSize: 16}}>Status:</Text>
