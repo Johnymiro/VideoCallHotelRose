@@ -1,8 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, Button, Dimensions, Image} from 'react-native';
+import {View, Text, Button, Dimensions, Image, Vibration} from 'react-native';
 import ContactCard from '../../components/ContactCard';
 import firestore from '@react-native-firebase/firestore';
-import {useClientPage} from './useClientPage';
 
 const window = Dimensions.get('window');
 
@@ -12,7 +11,7 @@ const styles = {
     paddingTop: 15,
     paddingBottom: 15,
     paddingRight: 7.5,
-    paddingLeft: 7.5,
+    paddingLeft: 9.5,
     backgroundColor: '#C85596',
   },
   content: {
@@ -45,9 +44,8 @@ const styles = {
 
 export default function ClientHomePage({onCall, data, endCall}) {
   const [contactList, setContactList] = useState();
-  //const {client, contactList} = useClientPage();
 
-   const getUsers = async () => {
+  const getUsers = async () => {
     const subscriber = await firestore()
       .collection('Users')
       .onSnapshot(
@@ -83,11 +81,10 @@ export default function ClientHomePage({onCall, data, endCall}) {
     const subscriber = getUsers();
     const subscriber2 = handleManagerCalling();
     return () => {
-      subscriber && subscriber();
-      subscriber2 && subscriber2();
+      subscriber && typeof subscriber === 'function' && subscriber();
+      subscriber2 && typeof subscriber2 === 'function' && subscriber2();
     };
-  }, []); 
-
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -115,3 +112,4 @@ export default function ClientHomePage({onCall, data, endCall}) {
     </View>
   );
 }
+// Vibration.cancel()  

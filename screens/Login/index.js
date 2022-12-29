@@ -23,7 +23,6 @@ const styles = {
   image: {
     width: window.width * 0.77,
     height: window.width * 0.15,
-    marginBottom: 78,
     marginLeft: 'auto',
     marginRight: 'auto',
   },
@@ -39,7 +38,10 @@ const Login = ({setUser}) => {
 
   const handleLogin = async () => {
     if (text && password) {
-      const user = await firestore().collection('Users').doc(text.toLowerCase()).get();
+      const user = await firestore()
+        .collection('Users')
+        .doc(text.toLowerCase())
+        .get();
 
       console.log(user.data());
       if (user.exists && user.data().password === password) {
@@ -53,10 +55,20 @@ const Login = ({setUser}) => {
 
   return (
     <View style={styles.container}>
-      <Image
-        style={styles.image}
-        source={require('../../assets/HotelRoseTitle.jpeg')}
-      />
+      <View
+        style={{
+          width: '100%',
+          padding: 30,
+          borderRadius: 3,
+          backgroundColor: 'white',
+          alignItems: 'center',
+          marginBottom: 78,
+        }}>
+        <Image
+          style={styles.image}
+          source={require('../../assets/HotelRoseTitle.jpeg')}
+        />
+      </View>
       <Text style={styles.label}>Username:</Text>
       <TextInput
         style={styles.textInput}

@@ -2,20 +2,20 @@ import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
-  Button,
   Switch,
-  TouchableOpacity,
   Image,
   Dimensions,
-  Alert,
+  Vibration,
+  TouchableOpacity,
+  Appearance,
 } from 'react-native';
 import {colors} from '../../constants';
-import ContactCard from '../../components/ContactCard';
 import firestore from '@react-native-firebase/firestore';
 import Popup from './Popup';
-import {is} from '@babel/types';
 
 const window = Dimensions.get('window');
+const ONE_SECOND_IN_MS = 1000;
+const colorScheme = Appearance.getColorScheme();
 
 const styles = {
   container: {
@@ -28,21 +28,23 @@ const styles = {
   userStatus: {
     display: 'flex',
     flexDirection: 'row',
-    width: '100%',
+    width: '70%',
+    height: 100,
     borderWidth: 1,
     borderRadius: 5,
     borderColor: 'grey',
-    margin: 30,
+    /*     marginRight: 80,
+    marginLeft: "20%", */
     justifyContent: 'space-around',
     gap: 5,
     alignItems: 'center',
     padding: 12,
-    backgroundColor: colors.customBeige,
+    backgroundColor: colorScheme === 'dark' ? 'black' : colors.customBeige,
   },
   userStatusLabel: {
     fontWeight: 'bold',
     marginRight: 30,
-    fontSize: 23,
+    fontSize: 27,
   },
   title: {
     fontSize: 29,
@@ -115,7 +117,7 @@ export default function ({user, call, setUser, setVideoCall}) {
       .doc(user.name.toLowerCase())
       .onSnapshot(
         client => {
-          if(!client.exists) return;
+          if (!client.exists) return;
           const isClientCalling = client.data()?.isClientCalling;
           setUser(client.data());
           if (isClientCalling) {
@@ -137,9 +139,17 @@ export default function ({user, call, setUser, setVideoCall}) {
         .collection('Users')
         .doc(user.name.toLowerCase())
         .update({isAvailable: false});
-      subs && subs();
+      subs && typeof subs === 'function' && subs();
     };
   }, []);
+
+  useEffect(() => {
+    if (modalVisible) {
+      Vibration.vibrate(10 * ONE_SECOND_IN_MS);
+      return;
+    }
+    Vibration.cancel();
+  }, [modalVisible]);
 
   return (
     <View style={styles.container}>
@@ -149,24 +159,36 @@ export default function ({user, call, setUser, setVideoCall}) {
         accept={acceptCall}
         decline={declineCall}
       />
-      <Image
-        style={styles.image}
-        source={require('../../assets/HotelRoseTitle.jpeg')}
-      />
+      <View
+        style={{
+          width: '100%',
+          padding: 30,
+          borderRadius: 3,
+          backgroundColor: "white",
+          alignItems: 'center'
+        }}>
+        <Image
+          style={styles.image}
+          source={require('../../assets/HotelRoseTitle.jpeg')}
+        />
+      </View>
       <Text style={styles.title}>Hi {user.name}</Text>
 
-      <View style={styles.userStatus}>
-        <Text style={styles.userStatusLabel}>
-          Switch to {isEnabled ? 'Offline' : 'Available'}:{' '}
-        </Text>
-        <Switch
-          trackColor={{false: 'grey', true: 'teal'}}
-          thumbColor={isEnabled ? 'lightseagreen' : '#f4f3f4'}
-          ios_backgroundColor="#3e3e3e"
-          onValueChange={toggleSwitch}
-          value={isEnabled}
-          // style={{transform: [{scaleX: 1.4}, {scaleY: 1.4}]}}
-        />
+      <View>
+        <Text style={{fontSize: 16}}>Status:</Text>
+        <View style={styles.userStatus}>
+          <Text style={styles.userStatusLabel}>
+            {isEnabled ? 'Offline' : 'Available'}{' '}
+          </Text>
+          <Switch
+            style={{transform: [{scaleX: 1.65}, {scaleY: 1.65}]}}
+            trackColor={{false: 'grey', true: 'teal'}}
+            thumbColor={isEnabled ? 'lightseagreen' : '#f4f3f4'}
+            onValueChange={toggleSwitch}
+            value={isEnabled}
+            // style={{transform: [{scaleX: 1.4}, {scaleY: 1.4}]}}
+          />
+        </View>
       </View>
 
       <View
@@ -176,29 +198,55 @@ export default function ({user, call, setUser, setVideoCall}) {
           flexDirection: 'row',
           justifyContent: 'center',
         }}>
-        {/*         <TouchableOpacity
-          onPress={getUsers}
-          title="Call Hotel"
-            style={styles.touchBtn}
-          accessibilityLabel="Call Button">
-          <Text style={styles.buttonText}>Call Now</Text>
-        </TouchableOpacity> */}
-        <View style={{marginRight: 28}}>
-          <Button
+        {/*           <Button
+            style=""
             onPress={call}
             title="Call Hotel"
             accessibilityLabel="Call Button"
-          />
-        </View>
-        <Button
+          /> */}
+        <CustomButton
+          color="#228B22"
+          width={170}
+          height={70}
+          onPress={call}
+          text="Call Hotel"
+        />
+        <CustomButton
+          color="#CC0000"
+          width={160}
+          height={70}
           onPress={() => {
             setUser?.(undefined);
           }}
-          title="Logout"
-          color="#CC0000"
-          accessibilityLabel="Logout Button"
+          text="Logout"
         />
       </View>
     </View>
+  );
+}
+
+function CustomButton({color, width, height, onPress, text}) {
+  return (
+    <TouchableOpacity
+      onPress={onPress}
+      style={{
+        height: height,
+        width: width,
+        backgroundColor: color,
+        borderRadius: 3,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginRight: 8,
+        marginLeft: 8,
+      }}>
+      <Text
+        style={{
+          color: 'white',
+          fontSize: 19,
+          fontWeight: 'bold',
+        }}>
+        {text}
+      </Text>
+    </TouchableOpacity>
   );
 }
