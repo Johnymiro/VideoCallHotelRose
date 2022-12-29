@@ -1,0 +1,81 @@
+{
+  "prod": {
+    "project_info": {
+      "project_number": "1034438031675",
+      "project_id": "hotel-rose-video-app",
+      "storage_bucket": "hotel-rose-video-app.appspot.com"
+    },
+    "client": [
+      {
+        "client_info": {
+          "mobilesdk_app_id": "1:1034438031675:android:a4a16fe9bc0e0e16155f1e",
+          "android_client_info": {
+            "package_name": "com.videocall"
+          }
+        },
+        "oauth_client": [
+          {
+            "client_id": "1034438031675-54sgumunogiq3nsshe57s7868s6ekts2.apps.googleusercontent.com",
+            "client_type": 3
+          }
+        ],
+        "api_key": [
+          {
+            "current_key": "AIzaSyBzOkvTdvPPKBqbAIvChnsvcEqvr7qgRJ8"
+          }
+        ],
+        "services": {
+          "appinvite_service": {
+            "other_platform_oauth_client": [
+              {
+                "client_id": "1034438031675-54sgumunogiq3nsshe57s7868s6ekts2.apps.googleusercontent.com",
+                "client_type": 3
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "configuration_version": "1"
+  },
+
+  "dev": {
+    "project_info": {
+      "project_number": "60720030636",
+      "project_id": "hotel-rose-dev-62286",
+      "storage_bucket": "hotel-rose-dev-62286.appspot.com"
+    },
+    "client": [
+      {
+        "client_info": {
+          "mobilesdk_app_id": "1:60720030636:android:5a2d494dec2a9747025009",
+          "android_client_info": {
+            "package_name": "com.hotelrosedev.videocall"
+          }
+        },
+        "oauth_client": [
+          {
+            "client_id": "60720030636-jsl8fkvbmj666emnhtcfesrppv80odtp.apps.googleusercontent.com",
+            "client_type": 3
+          }
+        ],
+        "api_key": [
+          {
+            "current_key": "AIzaSyCgEdcfuzCil6OdYzRCQWf9S34k8oki0Ho"
+          }
+        ],
+        "services": {
+          "appinvite_service": {
+            "other_platform_oauth_client": [
+              {
+                "client_id": "60720030636-jsl8fkvbmj666emnhtcfesrppv80odtp.apps.googleusercontent.com",
+                "client_type": 3
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "configuration_version": "1"
+  }
+}
